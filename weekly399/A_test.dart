@@ -1,3 +1,5 @@
+import 'package:test/test.dart';
+
 class NumberOfPairs {
   bool divisible(int num1, int num2, int k) {
     return num1 % (num2 * k) == 0;
@@ -15,4 +17,14 @@ class NumberOfPairs {
 
     return count;
   }
+}
+
+void main() {
+  test("", () {
+    expect(NumberOfPairs().numberOfPairs([1, 3, 4], [1, 3, 4], 1), equals(5));
+  });
+
+  test("", () {
+    expect(NumberOfPairs().numberOfPairs([1, 2, 4, 12], [2, 4], 3), equals(2));
+  });
 }

@@ -1,3 +1,4 @@
+import 'package:test/test.dart';
 import 'dart:collection';
 
 typedef Cache = HashMap<String, int>;
@@ -72,4 +73,14 @@ class Solution {
     StringCompressor compressor = StringCompressor(cache: hash, result: '', str: str);
     return compressor.compress();
   }
+}
+
+void main() {
+  test("", () {
+    expect(Solution().compressedString("abcde"), equals("1a1b1c1d1e"));
+  });
+
+  test("", () {
+    expect(Solution().compressedString("aaaaaaaaaaaaaabb"), equals("9a5a2b"));
+  });
 }

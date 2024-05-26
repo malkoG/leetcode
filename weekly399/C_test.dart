@@ -1,3 +1,4 @@
+import 'package:test/test.dart';
 import 'dart:collection';
 import 'dart:math';
 
@@ -53,4 +54,14 @@ class Solution {
   int numberOfPairs(List<int> nums1, List<int> nums2, int k) {
     return PairCounter(nums1, nums2).count(k);
   }
+}
+
+void main() {
+  test("", () {
+    expect(Solution().numberOfPairs([1, 3, 4], [1, 3, 4], 1), equals(5));
+  });
+
+  test("", () {
+    expect(Solution().numberOfPairs([1, 2, 4, 12], [2, 4], 3), equals(2));
+  });
 }

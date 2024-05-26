@@ -1,0 +1,7 @@
+name: leetcode
+description: leetcode snippets
+version: 0.0.1 
+dependencies:
+  test: any 
+environment:
+  sdk: '^3.3.0'
