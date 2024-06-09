@@ -11,7 +11,7 @@ class Solution {
     if (n == 0) return matrix[n][k] = 1;
     if (k == 0) return matrix[n][k] = 1;
 
-    return matrix[n][k] = (solve(n, k - 1) + solve(n - 1, k) % (1e9 + 7).toInt());
+    return matrix[n][k] = (solve(n, k - 1) + solve(n - 1, k)) % (1e9 + 7).toInt();
   }
 
   void bootstrap() {
@@ -31,11 +31,7 @@ class Solution {
   }
 
   int valueAfterKSeconds(int n, int k) {
-    if (matrix[1][1] == -1) {
-      bootstrap();
-    }
-
-    return matrix[n - 1][k];
+    return solve(n - 1, k);
   }
 }
 
