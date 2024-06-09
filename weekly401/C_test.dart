@@ -1,47 +1,35 @@
+import 'dart:math';
+
 import 'package:test/test.dart';
 import 'dart:collection';
-import 'dart:math';
 
 class Solution {
   int maxTotalReward(List<int> rewardValues) {
-    List<int> sortedRewardValues = List.from(rewardValues)..sort((a, b) => a - b);
-    List<int> accumulatedLisSum = List.generate(rewardValues.length, (index) => 0);
-    List<int> accumulatedRewardCandidates = List.generate(rewardValues.length, (index) => 0);
+    List<int> sortedRewardValues = rewardValues;
+    sortedRewardValues.sort((a, b) => a - b);
 
-    for (int i = 0; i < rewardValues.length; i++) {
-      accumulatedLisSum[i] = rewardValues[i];
-      accumulatedRewardCandidates[i] = sortedRewardValues[i];
+    List<SplayTreeSet<int>> maximumRewardValueCandidates = [SplayTreeSet<int>(), SplayTreeSet<int>()];
 
-      for (int k = 0; k < i; k++) {
-        if (rewardValues[i] > rewardValues[k]) {
-          accumulatedLisSum[i] = max(accumulatedLisSum[i], accumulatedLisSum[k] + rewardValues[i]);
-        }
+    maximumRewardValueCandidates[0].add(0);
+    maximumRewardValueCandidates[1].add(0);
+    int i = 0;
+    for (int rewardValue in sortedRewardValues) {
+      int sourceIndex = i % 2;
+      int targetIndex = (i + 1) % 2;
+      maximumRewardValueCandidates[targetIndex].add(rewardValue);
+      var source = maximumRewardValueCandidates[sourceIndex];
+      var iterable = source.takeWhile((candidate) => candidate < rewardValue);
+      for (int candidate in source) {
+        maximumRewardValueCandidates[targetIndex].add(candidate);
       }
-
-      for (int k = 0; k < i; k++) {
-        int candidate = accumulatedRewardCandidates[k];
-        if (candidate < sortedRewardValues[i]) {
-          accumulatedRewardCandidates[i] = max(sortedRewardValues[i], candidate + sortedRewardValues[i]);
-        }
-
-        if (accumulatedLisSum[k] < sortedRewardValues[i]) {
-          accumulatedRewardCandidates[i] =
-              max(accumulatedRewardCandidates[i], accumulatedLisSum[k] + sortedRewardValues[i]);
-        }
-
-        if (sortedRewardValues[k] < sortedRewardValues[i]) {
-          accumulatedRewardCandidates[i] =
-              max(accumulatedRewardCandidates[i], sortedRewardValues[k] + sortedRewardValues[i]);
-        }
+      for (int candidate in iterable) {
+        maximumRewardValueCandidates[targetIndex].add(rewardValue + candidate);
       }
-    }
+      maximumRewardValueCandidates[targetIndex].add(rewardValue);
 
-    int answer = 0;
-    for (int i = 0; i < accumulatedRewardCandidates.length; i++) {
-      answer = max(answer, accumulatedRewardCandidates[i]);
+      i += 1;
     }
-
-    return answer;
+    return max(maximumRewardValueCandidates[0].reduce(max), maximumRewardValueCandidates[1].reduce(max));
   }
 }
 
@@ -51,5 +39,7 @@ void main() {
     expect(Solution().maxTotalReward([1, 6, 4, 3, 2]), equals(11));
     expect(Solution().maxTotalReward([1, 5, 4]), equals(9));
     expect(Solution().maxTotalReward([3, 4, 17, 11]), equals(32));
+    expect(Solution().maxTotalReward([19, 1, 14, 13]), equals(34));
+    expect(Solution().maxTotalReward([5, 8, 9, 12]), equals(21));
   });
 }
